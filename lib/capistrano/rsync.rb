@@ -94,4 +94,14 @@ end
   # Matches the naming scheme of git tasks.
   # Plus was part of the public API in Capistrano::Rsync <= v0.2.1.
   task :create_release => %w[release]
+
+  desc "Set the current revision"
+  task :set_current_revision do
+    run_locally do
+      within fetch(:rsync_stage) do
+        rev = capture(:git, 'rev-parse', '--short', 'HEAD')
+        set :current_revision, rev
+      end
+    end
+  end
 end
